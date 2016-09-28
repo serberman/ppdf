@@ -1,7 +1,7 @@
-;;-------------------------=={  Print to PDF  }==------------------------;;
-;; © 2015 Sergey Berman, berman.sergey@gmail.com
+п»ї;;-------------------------=={  Print to PDF  }==------------------------;;
+;; В© 2015 Sergey Berman, berman.sergey@gmail.com
 (defun c:ppdf ()
-; считываем настройки
+; СЃС‡РёС‚С‹РІР°РµРј РЅР°СЃС‚СЂРѕР№РєРё
 (setq f "ppdf.ini") ;-Opens the file to read
 (if (and (setq f (findfile f)) (setq f (open f "r")))
 	(progn
@@ -16,25 +16,25 @@
 	(close f)
 	)
 	(progn
-	(print "Error: Не найден .ini файл настроек") 
+	(print "Error: РќРµ РЅР°Р№РґРµРЅ .ini С„Р°Р№Р» РЅР°СЃС‚СЂРѕРµРє") 
 	(abort)
 	)
 )
-; выбираем нужную вкладку
+; РІС‹Р±РёСЂР°РµРј РЅСѓР¶РЅСѓСЋ РІРєР»Р°РґРєСѓ
 (cond ((= sheatprint "Active") (setq sheatprint (getvar 'TILEMODE)))
       ((= sheatprint "Model") (setvar 'TILEMODE 1)) ; Model
 	  ((= sheatprint "Layout") (setvar 'TILEMODE 0)) ; Layout
-	  (t (print "Error: задан неверный параметр 1-й строки .ini файла. Допускается Model/Layout/Active") (abort))
+	  (t (print "Error: Р·Р°РґР°РЅ РЅРµРІРµСЂРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ 1-Р№ СЃС‚СЂРѕРєРё .ini С„Р°Р№Р»Р°. Р”РѕРїСѓСЃРєР°РµС‚СЃСЏ Model/Layout/Active") (abort))
 )
-; находим границы чертежа
+; РЅР°С…РѕРґРёРј РіСЂР°РЅРёС†С‹ С‡РµСЂС‚РµР¶Р°
 (SetVar "treedepth" (GETvar "treedepth"))
 	(setq bt (getvar "extmin")
       tp (getvar "extmax")
     ) ;_  end setq
 	(setq shir (- (car tp) (car bt)))
 	(setq dlin (- (cadr tp) (cadr bt)))
-; определим нужный формат
-(setq gipt (sqrt (+ (* shir shir) (* dlin dlin)))) ;находим гипотенузу :)
+; РѕРїСЂРµРґРµР»РёРј РЅСѓР¶РЅС‹Р№ С„РѕСЂРјР°С‚
+(setq gipt (sqrt (+ (* shir shir) (* dlin dlin)))) ;РЅР°С…РѕРґРёРј РіРёРїРѕС‚РµРЅСѓР·Сѓ :)
 (setq pogr 15)
 (cond ((and (> gipt (- 364 pogr)) (< gipt (+ 364 pogr))) (setq formatka "A4") (setq colform 1))
       ((and (> gipt (- 515 pogr)) (< gipt (+ 515 pogr))) (setq formatka "A3") (setq colform 2))
@@ -55,54 +55,54 @@
 	  ((and (> gipt (- 1916 pogr)) (< gipt (+ 1916 pogr))) (setq formatka "A4x9") (setq colform 9))
 	  ((and (> gipt (- 2122 pogr)) (< gipt (+ 2122 pogr))) (setq formatka "A3x7") (setq colform 14))
 	  ((and (> gipt (- 2184 pogr)) (< gipt (+ 2184 pogr))) (setq formatka "A2x5") (setq colform 20))
-	  (t (princ "Error: Границы печати превосходят все имеющиеся форматы листов") (abort))
+	  (t (princ "Error: Р“СЂР°РЅРёС†С‹ РїРµС‡Р°С‚Рё РїСЂРµРІРѕСЃС…РѕРґСЏС‚ РІСЃРµ РёРјРµСЋС‰РёРµСЃСЏ С„РѕСЂРјР°С‚С‹ Р»РёСЃС‚РѕРІ") (abort))
 ) ;_ cond
 
-; зададим параметры печати
-(if ( > shir dlin) (setq orientat "Альбомная") (setq orientat "Книжная"))
+; Р·Р°РґР°РґРёРј РїР°СЂР°РјРµС‚СЂС‹ РїРµС‡Р°С‚Рё
+(if ( > shir dlin) (setq orientat "РђР»СЊР±РѕРјРЅР°СЏ") (setq orientat "РљРЅРёР¶РЅР°СЏ"))
 (print sheatprint)
-	  (COMMAND 	"-Печать"
-			"Да"
+	  (COMMAND 	"-РџРµС‡Р°С‚СЊ"
+			"Р”Р°"
 			(vla-get-name (vla-get-activelayout (vla-get-activedocument (vlax-get-acad-object)))) ;sheatprint
 			setprinter
 			formatka
-			"Миллиметры"
+			"РњРёР»Р»РёРјРµС‚СЂС‹"
 			orientat
-			"Нет"
+			"РќРµС‚"
 			granicy
 			mashtab
 			centrotstup
-			"Да"
+			"Р”Р°"
 			ctbstyle
-			"Да"
-			; делим код для модели и листа
-			(if (= (getvar 'TILEMODE) 1) "Обычный" "Нет")
-			(if (= (getvar 'TILEMODE) 1) (strcat (getvar "dwgprefix") (vl-filename-base (getvar "dwgname")) ".pdf") "Нет")
-			(if (= (getvar 'TILEMODE) 1) setprintsave "Нет")
+			"Р”Р°"
+			; РґРµР»РёРј РєРѕРґ РґР»СЏ РјРѕРґРµР»Рё Рё Р»РёСЃС‚Р°
+			(if (= (getvar 'TILEMODE) 1) "РћР±С‹С‡РЅС‹Р№" "РќРµС‚")
+			(if (= (getvar 'TILEMODE) 1) (strcat (getvar "dwgprefix") (vl-filename-base (getvar "dwgname")) ".pdf") "РќРµС‚")
+			(if (= (getvar 'TILEMODE) 1) setprintsave "РќРµС‚")
 			(if (= (getvar 'TILEMODE) 1) pechat (strcat (getvar "dwgprefix") (vl-filename-base (getvar "dwgname")) ".pdf"))
 			(if (/= (getvar 'TILEMODE) 1) setprintsave)
 			(if (/= (getvar 'TILEMODE) 1) pechat)  
 		)
-; формирование отчёта
+; С„РѕСЂРјРёСЂРѕРІР°РЅРёРµ РѕС‚С‡С‘С‚Р°
 (setq fn (strcat (getvar "dwgprefix") "ppdfReport_" (_FormatDate "YYYYMODD") ".csv"))	
-; проверка существования файла
+; РїСЂРѕРІРµСЂРєР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ С„Р°Р№Р»Р°
    (setq fnfind (findfile fn))
-; если файл не существует 
+; РµСЃР»Рё С„Р°Р№Р» РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ 
    (if (= fnfind nil)
       (progn
 		(setq fo (open fn "a"))
 		(write-line
-          (strcat "Отчёт сформирован:;"
+          (strcat "РћС‚С‡С‘С‚ СЃС„РѕСЂРјРёСЂРѕРІР°РЅ:;"
             (_FormatDate "DD.MO.YYYY HH:MM")
           )
           fo
         )
         (write-line "" fo)
-        (write-line (strcat "Лист;" "Формат;" "Кол-во А4;") fo)
+        (write-line (strcat "Р›РёСЃС‚;" "Р¤РѕСЂРјР°С‚;" "РљРѕР»-РІРѕ Рђ4;") fo)
 		(close fo)
 	  )
 	)
-	; Если файл существует
+	; Р•СЃР»Рё С„Р°Р№Р» СЃСѓС‰РµСЃС‚РІСѓРµС‚
 		(setq fo (open fn "a"))
         (write-line 
 			(strcat 
@@ -124,19 +124,19 @@
 ;;-------------------------------------------------------------------------------;;
 (vl-load-com)
 (princ)
-(princ "\n:: ppdf.lsp | Version 1.1 | © 2015 Sergey Berman, berman.sergey@gmail.com ::")
-(princ "\n::Для подключения файла настроек необходимо добавить адрес его расположения в AutoCAD")
-(princ "(Сервис/Настройка.../Файлы/Путь доступа к вспомогательным файлам) - выполняется один раз")
-(princ "\n:: Файл ppdf.ini содержит следующие настройки печати: ::")
-(princ "\n:: Строка 1 - Тип вкладки печати (Model/Layout/Active) ::")
-(princ "\n:: Строка 2 - Плоттер для печати (DWG To PDF.pc3) ::")
-(princ "\n:: Строка 3 - Что печатать (Экран/Границы/Лимиты/Вид/Рамка/Лист) ::")
-(princ "\n:: Строка 4 - Масштаб печати форматок (1=1) ::")
-(princ "\n:: Строка 5 - Центрировать или задать отступ печати (Центрировать/1.5,-1.5) ::")
-(princ "\n:: Строка 6 - Стиль печати (monochrome.ctb) ::")
-(princ "\n:: Строка 7 - Сохранить изменения параметров листа (Да/Нет) ::")
-(princ "\n:: Строка 8 - Перейти к печати (Да/Нет) ::")
-(princ "\n:: Наберите \"ppdf\" для запуска печати в PDF ::")
+(princ "\n:: ppdf.lsp | Version 1.1 | В© 2015 Sergey Berman, berman.sergey@gmail.com ::")
+(princ "\n::Р”Р»СЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ С„Р°Р№Р»Р° РЅР°СЃС‚СЂРѕРµРє РЅРµРѕР±С…РѕРґРёРјРѕ РґРѕР±Р°РІРёС‚СЊ Р°РґСЂРµСЃ РµРіРѕ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ РІ AutoCAD")
+(princ "(РЎРµСЂРІРёСЃ/РќР°СЃС‚СЂРѕР№РєР°.../Р¤Р°Р№Р»С‹/РџСѓС‚СЊ РґРѕСЃС‚СѓРїР° Рє РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рј С„Р°Р№Р»Р°Рј) - РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РѕРґРёРЅ СЂР°Р·")
+(princ "\n:: Р¤Р°Р№Р» ppdf.ini СЃРѕРґРµСЂР¶РёС‚ СЃР»РµРґСѓСЋС‰РёРµ РЅР°СЃС‚СЂРѕР№РєРё РїРµС‡Р°С‚Рё: ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 1 - РўРёРї РІРєР»Р°РґРєРё РїРµС‡Р°С‚Рё (Model/Layout/Active) ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 2 - РџР»РѕС‚С‚РµСЂ РґР»СЏ РїРµС‡Р°С‚Рё (DWG To PDF.pc3) ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 3 - Р§С‚Рѕ РїРµС‡Р°С‚Р°С‚СЊ (Р­РєСЂР°РЅ/Р“СЂР°РЅРёС†С‹/Р›РёРјРёС‚С‹/Р’РёРґ/Р Р°РјРєР°/Р›РёСЃС‚) ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 4 - РњР°СЃС€С‚Р°Р± РїРµС‡Р°С‚Рё С„РѕСЂРјР°С‚РѕРє (1=1) ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 5 - Р¦РµРЅС‚СЂРёСЂРѕРІР°С‚СЊ РёР»Рё Р·Р°РґР°С‚СЊ РѕС‚СЃС‚СѓРї РїРµС‡Р°С‚Рё (Р¦РµРЅС‚СЂРёСЂРѕРІР°С‚СЊ/1.5,-1.5) ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 6 - РЎС‚РёР»СЊ РїРµС‡Р°С‚Рё (monochrome.ctb) ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 7 - РЎРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ Р»РёСЃС‚Р° (Р”Р°/РќРµС‚) ::")
+(princ "\n:: РЎС‚СЂРѕРєР° 8 - РџРµСЂРµР№С‚Рё Рє РїРµС‡Р°С‚Рё (Р”Р°/РќРµС‚) ::")
+(princ "\n:: РќР°Р±РµСЂРёС‚Рµ \"ppdf\" РґР»СЏ Р·Р°РїСѓСЃРєР° РїРµС‡Р°С‚Рё РІ PDF ::")
 (princ)
 ;;-------------------------------------------------------------------------------;;
 ;;                                  End of File                                  ;;
